@@ -15,7 +15,7 @@ VALUES
 
 INSERT INTO kanban_board (event_id, name)
 VALUES
-  (1, 'F&G Kanban Board');
+  (1, 'F&G wedding');
 
 INSERT INTO swimlane (board_id, status, name)
 VALUES
