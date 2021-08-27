@@ -1,24 +1,26 @@
-const express = require('express');
-const router  = express.Router();
+const express = require("express");
+const router = express.Router();
 
 // Get all events for a user
 module.exports = (db) => {
   router.get("/users/:user", (req, res) => {
     // http://localhost:8002/api/users/1  < 1 is the user's id
-    db.query(`
+    db.query(
+      `
         SELECT * 
         FROM events
         INNER JOIN users_events
         ON events.id = event_id
-        WHERE user_id = $1;`, [req.params.user])
-      .then(data => {
+        WHERE user_id = $1;
+        `,
+      [req.params.user]
+    )
+      .then((data) => {
         const users = data.rows;
         res.json({ users });
       })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: err.message });
+      .catch((err) => {
+        res.status(500).json({ error: err.message });
       });
   });
   return router;

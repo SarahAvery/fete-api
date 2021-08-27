@@ -57,7 +57,7 @@ CREATE TABLE swimlane (
 CREATE TABLE do_item (
   id SERIAL PRIMARY KEY NOT NULL,
   swimlane_id INTEGER REFERENCES swimlane(id) ON DELETE CASCADE,
-  date_added TIMESTAMP DEFAULT now(),
+  last_edit TIMESTAMP DEFAULT now(),
   status TEXT NOT NULL,
   title TEXT NOT NULL,
   description TEXT,
