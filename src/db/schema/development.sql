@@ -5,11 +5,13 @@ VALUES
 
 INSERT INTO events (title, first_name, second_name, event_date_weekday, event_date_day, event_date_month, event_date_year, email, phone_number, unit, street_number,street_name, street_type, postal_code, city)
 VALUES
-  ('F&G wedding', 'Frank Alistair', 'Georgia Green', 'Saturday', 21, 'August', 2022, 'fngwedding@email.com', '4168261456', '23A', 145, 'Brooklands', 'Place', 'M2X 4W9', 'Cityville');
+  ('F&G wedding', 'Frank Alistair', 'Georgia Green', 'Saturday', 21, 'August', 2022, 'fngwedding@email.com', '4168261456', '23A', 145, 'Brooklands', 'Place', 'M2X 4W9', 'Cityville'),
+  ('Lucy & Kate', 'Lucy Watson', 'Kate Lincoln', 'Friday', 3, 'June', 2022, 'gettingmarried@email.com', '4161649826', 'Suite 2306', 4873, 'Astor', 'Drive', 'L7R 1K8', 'Townsville');
 
 INSERT INTO users_events (user_id, event_id)
 VALUES 
-  (1, 1);
+  (1, 1),
+  (1, 2);
 
 INSERT INTO kanban_board (event_id, name)
 VALUES

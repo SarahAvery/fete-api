@@ -39,8 +39,8 @@ module.exports = function application(
   app.use(helmet());
   app.use(bodyparser.json());
 
-  app.use("/api/:user", user_events(db));
-  app.use("/api/:event", event_items(db));
+  app.use("/api", user_events(db));
+  app.use("/api", event_items(db));
   // app.use("/api", days(db));
   // app.use("/api", appointments(db, actions.updateAppointment));
   // app.use("/api", interviewers(db));
