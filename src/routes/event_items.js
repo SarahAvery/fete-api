@@ -3,6 +3,7 @@ const router = express.Router();
 
 // Get all to-do items for a specific event
 module.exports = (db) => {
+    // http://localhost:8002/api/event/1  < 1 is the event id
   router.get("/event/:id", (req, res) => {
     db.query(
       `
