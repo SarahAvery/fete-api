@@ -12,6 +12,7 @@ const db = require("./db");
 
 const user_events = require("./routes/users_events");
 const event_items = require("./routes/event_items");
+const login = require("./routes/login");
 // const days = require("./routes/days");
 // const appointments = require("./routes/appointments");
 // const interviewers = require("./routes/interviewers");
@@ -41,6 +42,7 @@ module.exports = function application(
 
   app.use("/api", user_events(db));
   app.use("/api", event_items(db));
+  app.use("/", login(db));
   // app.use("/api", days(db));
   // app.use("/api", appointments(db, actions.updateAppointment));
   // app.use("/api", interviewers(db));
