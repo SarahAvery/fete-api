@@ -1,76 +1,59 @@
-WITH days(day) AS (
-  VALUES ( 'Monday' ), ( 'Tuesday' ), ( 'Wednesday' ), ( 'Thursday' ), ( 'Friday' )
-)
-INSERT INTO days (name)
-SELECT day FROM days;
-
-WITH times(time) AS (
-	VALUES ('12pm'), ('1pm'), ('2pm'), ('3pm'), ('4pm')
-)
-INSERT INTO appointments (time, day_id)
-SELECT time, id as day_id FROM days, times ORDER BY day_id, time;
-
-INSERT INTO interviewers (name, avatar)
+INSERT INTO users (email, password)
 VALUES
-  ('Sylvia Palmer', 'https://i.imgur.com/LpaY82x.png'),
-  ('Tori Malcolm', 'https://i.imgur.com/Nmx0Qxo.png'),
-  ('Mildred Nazir', 'https://i.imgur.com/T2WwVfS.png'),
-  ('Cohana Roy', 'https://i.imgur.com/FK8V841.jpg'),
-  ('Sven Jones', 'https://i.imgur.com/twYrpay.jpg'),
-  ('Susan Reynolds', 'https://i.imgur.com/TdOAdde.jpg'),
-  ('Alec Quon', 'https://i.imgur.com/3tVgsra.jpg'),
-  ('Viktor Jain', 'https://i.imgur.com/iHq8K8Z.jpg'),
-  ('Lindsay Chu', 'https://i.imgur.com/nPywAp1.jpg'),
-  ('Samantha Stanic', 'https://i.imgur.com/okB9WKC.jpg');
+  ('email@email.com', 'password'),
+  ('memail@otheremail.com', 'password');
 
-INSERT INTO available_interviewers (day_id, interviewer_id)
-SELECT 1 as day_id, interviewers.interviewer_id FROM ( SELECT id AS interviewer_id FROM interviewers ORDER BY RANDOM() LIMIT 5 ) interviewers;
+INSERT INTO events (title, first_name, second_name, event_date_weekday, event_date_day, event_date_month, event_date_year, email, phone_number, unit, street_number,street_name, street_type, postal_code, city)
+VALUES
+  ('F&G wedding', 'Frank Alistair', 'Georgia Green', 'Saturday', 21, 'August', 2022, 'fngwedding@email.com', '4168261456', '23A', 145, 'Brooklands', 'Place', 'M2X 4W9', 'Cityville'),
+  ('Lucy & Kate', 'Lucy Watson', 'Kate Lincoln', 'Friday', 3, 'June', 2022, 'gettingmarried@email.com', '4161649826', 'Suite 2306', 4873, 'Astor', 'Drive', 'L7R 1K8', 'Townsville');
 
-INSERT INTO available_interviewers (day_id, interviewer_id)
-SELECT 2 as day_id, interviewers.interviewer_id FROM ( SELECT id AS interviewer_id FROM interviewers ORDER BY RANDOM() LIMIT 5 ) interviewers;
+INSERT INTO users_events (user_id, event_id)
+VALUES 
+  (1, 1),
+  (1, 2);
 
-INSERT INTO available_interviewers (day_id, interviewer_id)
-SELECT 3 as day_id, interviewers.interviewer_id FROM ( SELECT id AS interviewer_id FROM interviewers ORDER BY RANDOM() LIMIT 5 ) interviewers;
+INSERT INTO kanban_board (event_id, name)
+VALUES
+  (1, 'F&G Kanban Board');
 
-INSERT INTO available_interviewers (day_id, interviewer_id)
-SELECT 4 as day_id, interviewers.interviewer_id FROM ( SELECT id AS interviewer_id FROM interviewers ORDER BY RANDOM() LIMIT 5 ) interviewers;
+INSERT INTO swimlane (board_id, status, name)
+VALUES
+  (1, 1, 'To Do'),
+  (1, 1, 'Follow Up'),
+  (1, 1, 'Pending Approval'),
+  (1, 1, 'Approved'),
+  (1, 1, 'Booked'),
+  (1, 1, 'Billed'),
+  (1, 1, 'Paid');
 
-INSERT INTO available_interviewers (day_id, interviewer_id)
-SELECT 5 as day_id, interviewers.interviewer_id FROM ( SELECT id AS interviewer_id FROM interviewers ORDER BY RANDOM() LIMIT 5 ) interviewers;
+INSERT INTO do_item (swimlane_id, status, title, description)
+VALUES
+  (1, 1, 'Choose Flowers', 'Floras Flowers'),
+  (1, 1, 'Buy Dress', 'Dress Barn - 123 Discount Wedding Way, Brantford'),
+  (1, 1, 'Call Grandma', 'Tell her not to die before the big day'),
+  (2, 1, 'Confirm with bridesmaids', 'Make sure they all accept'),
+  (2, 1, 'Confirm Photographer', 'Marianne Rothbauer'),
+  (3, 1, 'Venue Booking', 'The Country House Hotel'),
+  (4, 1, 'Invitations', 'Design and cost'),
+  (5, 1, 'DJ', 'The Beatmeister Wedding DJ - 416-459-3579'),
+  (7, 1, 'Deposit for rings', 'Vaughan Vintage and Specialty Jewellery');
 
-WITH
-appointments AS (
-  SELECT id as appointment_id, day_id FROM appointments ORDER BY RANDOM() LIMIT 10
-),
-students(name) AS(
-  VALUES
-    ('Liam Martinez'),
-    ('Richard Wong'),
-    ('Lydia Miller-Jones'),
-    ('Archie Cohen'),
-    ('Chad Takahashi'),
-    ('Leopold Silvers'),
-    ('Maria Boucher'),
-    ('Jamal Jordan'),
-    ('Michael Chan-Montoya'),
-    ('Yuko Smith')
-)
-INSERT INTO interviews (student, appointment_id, interviewer_id)
-SELECT
-  DISTINCT ON 
-  (s.name) name,
-  a.appointment_id AS appointment_id,
-  available_interviewers.interviewer_id AS interviewer_id
-FROM (
-  SELECT
-    *, row_number() OVER(ORDER BY appointment_id) AS rnum
-  FROM appointments
-) AS a
-JOIN (
-  SELECT
-    *, row_number() OVER(ORDER BY name) AS rnum
-  FROM students
-) AS s
-ON a.rnum = s.rnum
-JOIN available_interviewers
-ON a.day_id = available_interviewers.day_id;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
