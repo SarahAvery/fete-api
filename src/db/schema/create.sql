@@ -14,7 +14,6 @@ CREATE TABLE users (
   planner_role BOOLEAN NOT NULL DEFAULT FALSE
 );
 
-
 CREATE TABLE events (
   id SERIAL PRIMARY KEY NOT NULL,
   title TEXT,
