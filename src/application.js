@@ -39,6 +39,7 @@ module.exports = function application(
   app.use(cors());
   app.use(helmet());
   app.use(bodyparser.json());
+  app.use(express.json());
 
   app.use("/api", user_events(db));
   app.use("/api", event_items(db));
