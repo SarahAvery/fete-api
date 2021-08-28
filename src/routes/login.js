@@ -24,9 +24,10 @@ module.exports = (db) => {
 
           // Below is for a jwt
           const tokenData = { ...userDatabaseData, password: undefined }
-          // console.log('tokenData: ', tokenData)
           const accessToken = jwt.sign(tokenData, process.env.ACCESS_TOKEN_SECRET)
+          
           res.send({ accessToken: accessToken })
+
         }
       })
       .catch((err) => {
