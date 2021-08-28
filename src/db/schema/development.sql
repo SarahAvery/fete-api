@@ -1,7 +1,7 @@
 INSERT INTO users (email, password)
 VALUES
-  ('email@email.com', 'password'),
-  ('memail@otheremail.com', 'password');
+  ('email@email.com', '$2a$10$AImobkRCiRbwwgR5uRufgutlYpeyYYjA6kOA/pbq7OTF.REoOTmsa'),
+  ('memail@otheremail.com', '$2a$10$AImobkRCiRbwwgR5uRufgutlYpeyYYjA6kOA/pbq7OTF.REoOTmsa');
 
 INSERT INTO events (title, first_name, second_name, event_date_weekday, event_date_day, event_date_month, event_date_year, email, phone_number, unit, street_number,street_name, street_type, postal_code, city)
 VALUES
