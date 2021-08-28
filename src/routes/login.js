@@ -7,7 +7,6 @@ const salt = bcrypt.genSaltSync(10);
 const jwt = require('jsonwebtoken')
 
 
-
 module.exports = (db) => {
   router.post("/login", (req, res) => {
     const { email, password } = req.body;

@@ -13,6 +13,7 @@ const db = require("./db");
 const user_events = require("./routes/users_events");
 const event_items = require("./routes/event_items");
 const login = require("./routes/login");
+const register = require("./routes/register");
 const verifyToken = require("./routes/validate-token");
 // const days = require("./routes/days");
 // const appointments = require("./routes/appointments");
@@ -42,12 +43,17 @@ module.exports = function application(
   app.use(bodyparser.json());
   app.use(express.json());
 
-  app.use("/api", verifyToken, user_events(db));
-  app.use("/api", verifyToken, event_items(db));
+  app.use("/api", user_events(db));
+  app.use("/api", event_items(db));
+
+  // VERIFY TOKEN FUNCTION NOT CURRENTLY WORKING
+  // app.use("/api", verifyToken, user_events(db));
+  // app.use("/api", verifyToken, event_items(db));
+
+
   app.use("/", login(db));
-  // app.use("/api", days(db));
-  // app.use("/api", appointments(db, actions.updateAppointment));
-  // app.use("/api", interviewers(db));
+  app.use("/", register(db));
+
 
   if (ENV === "development" || ENV === "test") {
     Promise.all([
