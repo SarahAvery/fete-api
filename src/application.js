@@ -11,7 +11,6 @@ const app = express();
 const db = require("./db");
 
 const user_events = require("./routes/users_events");
-const user = require("./routes/user");
 const event_items = require("./routes/event_items");
 const login = require("./routes/login");
 const register = require("./routes/register");
@@ -44,16 +43,17 @@ module.exports = function application(
   app.use(bodyparser.json());
   app.use(express.json());
 
-  // app.use("/api", user_events(db));
-  // app.use("/api", event_items(db));
+  app.use("/api", user_events(db));
+  app.use("/api", event_items(db));
 
   // VERIFY TOKEN FUNCTION NOT CURRENTLY WORKING
-  app.use("/api", verifyToken, user_events(db));
-  app.use("/api", verifyToken, user(db));
-  app.use("/api", verifyToken, event_items(db));
+  // app.use("/api", verifyToken, user_events(db));
+  // app.use("/api", verifyToken, event_items(db));
+
 
   app.use("/", login(db));
   app.use("/", register(db));
+
 
   if (ENV === "development" || ENV === "test") {
     Promise.all([
@@ -64,20 +64,19 @@ module.exports = function application(
         app.get("/api/debug/reset", (request, response) => {
           db.query(create)
             .then(() => {
-              db.query(seed);
-            })
+              db.query(seed)})
             .then(() => {
               console.log("Database Reset");
               response.status(200).send("Database Reset");
             });
         });
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(`Error setting up the reset route: ${error}`);
       });
   }
 
-  app.close = function () {
+  app.close = function() {
     return db.end();
   };
 

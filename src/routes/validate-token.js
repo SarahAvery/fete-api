@@ -2,26 +2,16 @@ const jwt = require("jsonwebtoken");
 
 // middleware to validate token
 const verifyToken = (req, res, next) => {
-  const bearerHeader = req.headers["authorization"]; // 'Authorization: Bearer eyJraWQiOi...'
-
-  if (!bearerHeader) {
-    // Forbidden
-    res.status(401).json({ error: "Access denied" });
-  }
-
-  const bearer = bearerHeader.split(" "); // 'Bearer eyJraWQiOi...'
-  const bearerToken = bearer[1];
+  const token = req.header("auth-token");
+  if (!token) return res.status(401).json({ error: "Access denied" });
 
   try {
-    const verified = jwt.verify(bearerToken, process.env.ACCESS_TOKEN_SECRET);
+    const verified = jwt.verify(token, process.env.TOKEN_SECRET);
     req.user = verified;
-    console.log("req.user: ", req.user);
+    console.log('req.user: ', req.user)
     next();
   } catch (err) {
-    res.status(401).json({ error: "Token is not valid" });
-
-    // if we had resource permissions, would check here
-    // 200 or 403 unauthorized
+    res.status(400).json({ error: "Token is not valid" });
   }
 };
 
