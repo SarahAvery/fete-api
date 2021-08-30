@@ -3,7 +3,8 @@ const router = express.Router();
 
 // Get all events for a user
 module.exports = (db) => {
-  router.get("/users/:user", (req, res) => {
+  router.get("/events", (req, res) => {
+    if (!req.user.id) res.status(404).json({ error: "User id not provided" });
     // http://localhost:8002/api/users/1  < 1 is the user's id
     db.query(
       `
@@ -13,7 +14,7 @@ module.exports = (db) => {
         ON events.id = event_id
         WHERE user_id = $1;
         `,
-      [req.params.user]
+      [req.user.id]
     )
       .then((data) => {
         const users = data.rows;

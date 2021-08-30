@@ -25,8 +25,8 @@ module.exports = (db) => {
             tokenData,
             process.env.ACCESS_TOKEN_SECRET
           );
-
-          res.send({ accessToken: accessToken });
+          const { id, email, planner_role } = userDatabaseData;
+          res.send({ accessToken, id, email, planner_role });
         } else {
           res.status(403).json({ authenticated: false });
         }

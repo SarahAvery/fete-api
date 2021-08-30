@@ -11,7 +11,6 @@ module.exports = (db) => {
     const newUser = req.body;
     newUser.password = bcrypt.hashSync(newUser.password, salt);
     newUser.planner_role = true;
-    console.log("newUser back-end: ", newUser);
     const values = Object.values(newUser);
 
     // check if email already exists in database:
@@ -41,6 +40,10 @@ module.exports = (db) => {
           res.send({ error: "error" });
           return;
         }
+        // add the user id from the register query to the newUser so it becomes part of the token data
+        newUser.id = user[0].id;
+        console.log("newUser back-end: ", newUser, user[0]);
+
         // set jwt token:
         const tokenData = { ...newUser, password: undefined };
         const accessToken = jwt.sign(
