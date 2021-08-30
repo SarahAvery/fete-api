@@ -7,40 +7,44 @@ module.exports = (db) => {
   router.get("/event/:id", (req, res) => {
     db.query(
       `
-        SELECT 
-        swimlane.id AS swimlane_id,
-        board_id,
-        event_id AS events_id,
-        do_item.id AS do_item_id,
-        swimlane.status AS swimlane_status,
-        do_item.status AS do_item_status,
-        swimlane.name AS swimlane_name,
-        last_edit,
-        do_item.title AS do_item_title,
-        description,
-        date_due,
-        kanban_board.name AS kanban_board_name
-        FROM swimlane
-        INNER JOIN do_item
-        ON swimlane_id = swimlane.id
-        INNER JOIN kanban_board
-        ON board_id = kanban_board.id
-        WHERE event_id = $1;
-        `,
+      SELECT 
+      swimlane.id AS swim_id,
+      swimlane.name AS swim_title,
+      JSON_AGG( 
+        json_build_object(
+          'item_id', do_item.id, 
+          'item_title', do_item.title, 
+          'item_content', do_item.description
+        )
+      ) AS items
+      FROM do_item
+      INNER JOIN swimlane
+      ON swimlane_id = swimlane.id
+      INNER JOIN kanban_board
+      ON board_id = kanban_board.id
+      WHERE event_id = $1
+      GROUP BY swimlane.id, swimlane.name
+      ORDER BY swimlane.id;
+      `,
       [req.params.id]
     )
       .then((data) => {
-        const users = data.rows;
-        res.json({ users });
+        const event_items = data.rows;
+        res.json(event_items);
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
       });
   });
+
+
   return router;
 };
 
+
+
+
 // Returns this:
 /*
-{"users":[{"swimlane_id":1,"board_id":1,"events_id":1,"do_item_id":1,"swimlane_status":"1","do_item_status":"1","swimlane_name":"To Do","last_edit":"2021-08-27T21:42:08.622Z","do_item_title":"Choose Flowers","description":"Floras Flowers","date_due":null,"kanban_board_name":"F&G wedding"},{"swimlane_id":1,"board_id":1,"events_id":1,"do_item_id":2,"swimlane_status":"1","do_item_status":"1","swimlane_name":"To Do","last_edit":"2021-08-27T21:42:08.622Z","do_item_title":"Buy Dress","description":"Dress Barn - 123 Discount Wedding Way, Brantford","date_due":null,"kanban_board_name":"F&G wedding"},{"swimlane_id":1,"board_id":1,"events_id":1,"do_item_id":3,"swimlane_status":"1","do_item_status":"1","swimlane_name":"To Do","last_edit":"2021-08-27T21:42:08.622Z","do_item_title":"Call Grandma","description":"Tell her not to die before the big day","date_due":null,"kanban_board_name":"F&G wedding"},{"swimlane_id":2,"board_id":1,"events_id":1,"do_item_id":4,"swimlane_status":"1","do_item_status":"1","swimlane_name":"Follow Up","last_edit":"2021-08-27T21:42:08.622Z","do_item_title":"Confirm with bridesmaids","description":"Make sure they all accept","date_due":null,"kanban_board_name":"F&G wedding"},{"swimlane_id":2,"board_id":1,"events_id":1,"do_item_id":5,"swimlane_status":"1","do_item_status":"1","swimlane_name":"Follow Up","last_edit":"2021-08-27T21:42:08.622Z","do_item_title":"Confirm Photographer","description":"Marianne Rothbauer","date_due":null,"kanban_board_name":"F&G wedding"},{"swimlane_id":3,"board_id":1,"events_id":1,"do_item_id":6,"swimlane_status":"1","do_item_status":"1","swimlane_name":"Pending Approval","last_edit":"2021-08-27T21:42:08.622Z","do_item_title":"Venue Booking","description":"The Country House Hotel","date_due":null,"kanban_board_name":"F&G wedding"},{"swimlane_id":4,"board_id":1,"events_id":1,"do_item_id":7,"swimlane_status":"1","do_item_status":"1","swimlane_name":"Approved","last_edit":"2021-08-27T21:42:08.622Z","do_item_title":"Invitations","description":"Design and cost","date_due":null,"kanban_board_name":"F&G wedding"},{"swimlane_id":5,"board_id":1,"events_id":1,"do_item_id":8,"swimlane_status":"1","do_item_status":"1","swimlane_name":"Booked","last_edit":"2021-08-27T21:42:08.622Z","do_item_title":"DJ","description":"The Beatmeister Wedding DJ - 416-459-3579","date_due":null,"kanban_board_name":"F&G wedding"},{"swimlane_id":7,"board_id":1,"events_id":1,"do_item_id":9,"swimlane_status":"1","do_item_status":"1","swimlane_name":"Paid","last_edit":"2021-08-27T21:42:08.622Z","do_item_title":"Deposit for rings","description":"Vaughan Vintage and Specialty Jewellery","date_due":null,"kanban_board_name":"F&G wedding"}]}
+[{"swim_id":1,"swim_title":"To Do","items":[{"item_id":1,"item_title":"Choose Flowers","item_content":"Floras Flowers"},{"item_id":2,"item_title":"Buy Dress","item_content":"Dress Barn - 123 Discount Wedding Way, Brantford"},{"item_id":3,"item_title":"Call Grandma","item_content":"Tell her not to die before the big day"}]},{"swim_id":2,"swim_title":"Follow Up","items":[{"item_id":4,"item_title":"Confirm with bridesmaids","item_content":"Make sure they all accept"},{"item_id":5,"item_title":"Confirm Photographer","item_content":"Marianne Rothbauer"}]},{"swim_id":3,"swim_title":"Pending Approval","items":[{"item_id":6,"item_title":"Venue Booking","item_content":"The Country House Hotel"}]},{"swim_id":4,"swim_title":"Approved","items":[{"item_id":7,"item_title":"Invitations","item_content":"Design and cost"}]},{"swim_id":5,"swim_title":"Booked","items":[{"item_id":8,"item_title":"DJ","item_content":"The Beatmeister Wedding DJ - 416-459-3579"}]},{"swim_id":7,"swim_title":"Paid","items":[{"item_id":9,"item_title":"Deposit for rings","item_content":"Vaughan Vintage and Specialty Jewellery"}]}]
 */
