@@ -7,7 +7,7 @@ const salt = bcrypt.genSaltSync(10);
 const jwt = require("jsonwebtoken");
 
 module.exports = (db) => {
-  router.post("/register", (req, res) => {
+  router.post("/", (req, res) => {
     const newUser = req.body;
     newUser.password = bcrypt.hashSync(newUser.password, salt);
     newUser.planner_role = true;
@@ -53,5 +53,6 @@ module.exports = (db) => {
         res.send({ accessToken: accessToken });
       });
   });
+
   return router;
 };

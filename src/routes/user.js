@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 module.exports = (db) => {
-  router.get("/user/me", (req, res) => {
+  router.get("/me", (req, res) => {
     // req.user.id comes from the validate-token middleware
     if (!req.user.id) res.status(404).json({ error: "User id not provided" });
 
@@ -22,5 +22,6 @@ module.exports = (db) => {
         res.status(500).json({ error: err.message });
       });
   });
+
   return router;
 };

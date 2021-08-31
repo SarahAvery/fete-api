@@ -3,29 +3,26 @@ const router = express.Router();
 
 // Get all events for a user
 module.exports = (db) => {
-  router.get("/events", (req, res) => {
+  router.get("/", (req, res) => {
     if (!req.user.id) res.status(404).json({ error: "User id not provided" });
-    // http://localhost:8002/api/users/1  < 1 is the user's id
+
     db.query(
       `
         SELECT 
-        events.id AS id,
-        title AS title,
-        first_name AS first_name,
-        second_name AS second_name,
-        event_date_weekday AS weekday,
-        event_date_month AS month,
-        event_date_day AS day,
-        event_date_year AS year,
-        email AS email,
-        phone_number AS phone, 
-        unit AS unit,
-        street_number AS street_number,
-        street_name AS street_name,
-        street_type AS type,
-        postal_code AS postal,
-        city AS city,
-        percentage AS percent 
+          events.id AS event_id,
+          title,
+          first_name,
+          second_name,
+          event_date,
+          email,
+          phone, 
+          unit,
+          street_number,
+          street_name,
+          street_type,
+          postal_code,
+          city,
+          percentage
         FROM events
         INNER JOIN users_events
         ON events.id = event_id
@@ -35,6 +32,7 @@ module.exports = (db) => {
     )
       .then((data) => {
         const events = data.rows;
+        console.log(events);
         res.json(events);
       })
       .catch((err) => {
@@ -43,8 +41,3 @@ module.exports = (db) => {
   });
   return router;
 };
-
-// Returns this:
-/*
-[{"id":1,"title":"F&G wedding","first_name":"Frank Alistair","second_name":"Georgia Green","weekday":"Saturday","month":"August","day":21,"year":2022,"email":"fngwedding@email.com","phone":"4168261456","unit":"23A","street_number":"145","street_name":"Brooklands","type":"Place","postal":"M2X 4W9","city":"Cityville","percent":null},{"id":2,"title":"Lucy & Kate","first_name":"Lucy Watson","second_name":"Kate Lincoln","weekday":"Friday","month":"June","day":3,"year":2022,"email":"gettingmarried@email.com","phone":"4161649826","unit":"Suite 2306","street_number":"4873","street_name":"Astor","type":"Drive","postal":"L7R 1K8","city":"Townsville","percent":null}]
-*/

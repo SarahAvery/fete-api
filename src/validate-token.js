@@ -15,7 +15,7 @@ const verifyToken = (req, res, next) => {
   try {
     const verified = jwt.verify(bearerToken, process.env.ACCESS_TOKEN_SECRET);
     req.user = verified;
-    console.log("req.user: ", req.user);
+    // console.log("req.user: ", req.user);
     next();
   } catch (err) {
     res.status(401).json({ error: "Token is not valid" });

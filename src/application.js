@@ -12,10 +12,11 @@ const db = require("./db");
 
 const user_events = require("./routes/users_events");
 const user = require("./routes/user");
-const event_items = require("./routes/event_items");
+const board = require("./routes/board");
 const login = require("./routes/login");
 const register = require("./routes/register");
-const verifyToken = require("./routes/validate-token");
+const reset = require("./routes/reset");
+const verifyToken = require("./validate-token");
 // const days = require("./routes/days");
 // const appointments = require("./routes/appointments");
 // const interviewers = require("./routes/interviewers");
@@ -45,12 +46,8 @@ module.exports = function application(
   app.use(express.json());
 
   // public
-  app.use("/api", login(db));
-  app.use("/api", register(db));
-  // protected
-  app.use("/api", verifyToken, user_events(db));
-  app.use("/api", verifyToken, event_items(db));
-  app.use("/api", verifyToken, user(db));
+  app.use("/api/login", login(db));
+  app.use("/api/register", register(db));
 
   if (ENV === "development" || ENV === "test") {
     Promise.all([
@@ -58,21 +55,17 @@ module.exports = function application(
       read(path.resolve(__dirname, `db/schema/${ENV}.sql`))
     ])
       .then(([create, seed]) => {
-        app.get("/api/debug/reset", (request, response) => {
-          db.query(create)
-            .then(() => {
-              db.query(seed);
-            })
-            .then(() => {
-              console.log("Database Reset");
-              response.status(200).send("Database Reset");
-            });
-        });
+        app.use("/api/debug", reset(db, create, seed));
       })
       .catch((error) => {
         console.log(`Error setting up the reset route: ${error}`);
       });
   }
+
+  // protected
+  app.use("/api/events", verifyToken, user_events(db));
+  app.use("/api/board", verifyToken, board(db));
+  app.use("/api/user", verifyToken, user(db));
 
   app.close = function () {
     return db.end();
