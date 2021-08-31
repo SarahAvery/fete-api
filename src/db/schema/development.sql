@@ -8,11 +8,6 @@ VALUES
   ('F&G wedding', 'Frank Alistair', 'Georgia Green', '2016-06-22 22:10:25-04', 'fngwedding@email.com', '4168261456', '23A', 145, 'Brooklands', 'Place', 'M2X 4W9', 'Cityville'),
   ('Lucy & Kate', 'Lucy Watson', 'Kate Lincoln', '2016-06-22 22:10:25-04', 'gettingmarried@email.com', '4161649826', 'Suite 2306', 4873, 'Astor', 'Drive', 'L7R 1K8', 'Townsville');
 
-INSERT INTO users_events (user_id, event_id)
-VALUES 
-  (1, 1),
-  (1, 2);
-
 INSERT INTO boards (event_id, title)
 VALUES
   (1, 'F&G wedding');
