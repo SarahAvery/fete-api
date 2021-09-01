@@ -10,16 +10,19 @@ const app = express();
 
 const db = require("./db");
 
+const login = require("./routes/login");
+const register = require("./routes/register");
+
 const user_events = require("./routes/users_events");
 const user = require("./routes/user");
 const board = require("./routes/board");
-const login = require("./routes/login");
-const register = require("./routes/register");
+
+// Separated API Reset route:
 const reset = require("./routes/reset");
+
+// JWT check for all protected routes
 const verifyToken = require("./validate-token");
-// const days = require("./routes/days");
-// const appointments = require("./routes/appointments");
-// const interviewers = require("./routes/interviewers");
+
 
 function read(file) {
   return new Promise((resolve, reject) => {

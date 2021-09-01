@@ -42,7 +42,7 @@ module.exports = (db) => {
         }
         // add the user id from the register query to the newUser so it becomes part of the token data
         newUser.id = user[0].id;
-        console.log("newUser back-end: ", newUser, user[0]);
+        // console.log("newUser back-end: ", newUser, user[0]);
 
         // set jwt token:
         const tokenData = { ...newUser, password: undefined };
