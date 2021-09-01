@@ -51,10 +51,10 @@ module.exports = (db) => {
       !!req.body.length &&
       req.body.map((swimlane) => {
         return swimlane.items.map((task) => {
-          return db.query(`UPDATE tasks SET task_order = $1 WHERE id = $2;`, [
-            task.order,
-            task.id
-          ]);
+          return db.query(
+            `UPDATE tasks SET task_order = $1, swimlane_id = $2 WHERE id = $3;`,
+            [task.order, task.columnId, task.id]
+          );
         });
       });
 
