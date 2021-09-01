@@ -11,7 +11,7 @@ VALUES
 INSERT INTO users_events (user_id, event_id)
 VALUES 
   (1, 1),
-  (1, 3);
+  (1, 2);
 
 INSERT INTO boards (event_id, title)
 VALUES
