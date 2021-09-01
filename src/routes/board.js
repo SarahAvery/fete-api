@@ -39,43 +39,64 @@ module.exports = (db) => {
         items: tasksData.rows
       });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.sendStatus(500).json({ error: err.message });
     }
   });
 
   router.post("/:eventId/update", async (req, res) => {
-    console.log(req.body, req.params, req.query);
+    // console.log(req.body, req.params, req.query);
 
     const queries =
       req.body &&
       !!req.body.length &&
       req.body.map((swimlane) => {
         return swimlane.items.map((task) => {
-          return db.query(`UPDATE tasks SET task_order = $1 WHERE id = $2;`, [
-            task.order,
-            task.id
-          ]);
+          return db.query(
+            `UPDATE tasks SET task_order = $1, swimlane_id = $2 WHERE id = $3;`,
+            [task.order, task.columnId, task.id]
+          );
         });
       });
 
     try {
       const tasksData = await Promise.all(queries.flat());
-      tasksData.forEach((prom) => console.log(prom));
+      // tasksData.forEach((prom) => console.log(prom));
 
-      // res.json({
-      //   title: eventData.rows[0].title,
-      //   items: tasksData.rows
-      // });
-      res.send(200);
+      res.sendStatus(200);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.sendStatus(500).json({ error: err.message });
     }
+  });
+
+  // Add task to db
+  router.post("/:eventId/add", async (req, res) => {
+    console.log(req.body, req.params, req.query);
+    /*
+     * api recieves an array.
+     * [3, 0, 1, 'fd', 'dgd' ] { eventId: '1' }
+     * req.body = [task_order, columnId, status(always 1), title, content], req.params = {eventID: '1'}
+     */
+
+    const [order, columnId, status, title, content] = req.body;
+
+    // !!!!! SWIMLANE NEEDS TO BE CHANGED TO COLUMN
+    db.query(
+      `
+    INSERT into tasks(task_order, swimlane_id, status, title, content)
+    VALUES ($1, $2, $3, $4, $5)
+    `,
+      [order, parseInt(columnId), status, title, content]
+    )
+      .then((tasksData) => {
+        // const task = tasksData.rows[0];
+        // console.log(task);
+        // res.json(task);
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        res.status(500).json({ error: err.message });
+      });
   });
 
   return router;
 };
-
-// Returns this:
-/*
-[{"swim_id":1,"swim_title":"To Do","items":[{"item_id":1,"item_title":"Choose Flowers","item_content":"Floras Flowers"},{"item_id":2,"item_title":"Buy Dress","item_content":"Dress Barn - 123 Discount Wedding Way, Brantford"},{"item_id":3,"item_title":"Call Grandma","item_content":"Tell her not to die before the big day"}]},{"swim_id":2,"swim_title":"Follow Up","items":[{"item_id":4,"item_title":"Confirm with bridesmaids","item_content":"Make sure they all accept"},{"item_id":5,"item_title":"Confirm Photographer","item_content":"Marianne Rothbauer"}]},{"swim_id":3,"swim_title":"Pending Approval","items":[{"item_id":6,"item_title":"Venue Booking","item_content":"The Country House Hotel"}]},{"swim_id":4,"swim_title":"Approved","items":[{"item_id":7,"item_title":"Invitations","item_content":"Design and cost"}]},{"swim_id":5,"swim_title":"Booked","items":[{"item_id":8,"item_title":"DJ","item_content":"The Beatmeister Wedding DJ - 416-459-3579"}]},{"swim_id":7,"swim_title":"Paid","items":[{"item_id":9,"item_title":"Deposit for rings","item_content":"Vaughan Vintage and Specialty Jewellery"}]}]
-*/
