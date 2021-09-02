@@ -15,7 +15,8 @@ VALUES
 
 INSERT INTO boards (event_id, title)
 VALUES
-  (1, 'F&G wedding');
+  (1, 'F&G wedding'),
+  (2, 'L&K wedding');
 
 INSERT INTO swimlanes (board_id, status, title)
 VALUES
@@ -25,7 +26,14 @@ VALUES
   (1, 1, 'Approved'),
   (1, 1, 'Booked'),
   (1, 1, 'Billed'),
-  (1, 1, 'Paid');
+  (1, 1, 'Paid'),
+  (2, 1, 'To Do'),
+  (2, 1, 'Follow Up'),
+  (2, 1, 'Pending Approval'),
+  (2, 1, 'Approved'),
+  (2, 1, 'Booked'),
+  (2, 1, 'Billed'),
+  (2, 1, 'Paid');
 
 INSERT INTO tasks (swimlane_id, task_order, status, title, content)
 VALUES
@@ -37,7 +45,16 @@ VALUES
   (3, 0, 1, 'Venue Booking', 'The Country House Hotel'),
   (4, 0, 1, 'Invitations', 'Design and cost'),
   (5, 0, 1, 'DJ', 'The Beatmeister Wedding DJ - 416-459-3579'),
-  (7, 0, 1, 'Deposit for rings', 'Vaughan Vintage and Specialty Jewellery');
+  (7, 0, 1, 'Deposit for rings', 'Vaughan Vintage and Specialty Jewellery'),
+  (8, 0, 1, 'Choose Flowers', 'Floras Flowers'),
+  (8, 1, 1, 'Buy Dress', 'Dress Barn - 123 Discount Wedding Way, Brantford'),
+  (8, 2, 1, 'Call Grandma', 'Tell her not to die before the big day'),
+  (9, 0, 1, 'Confirm with bridesmaids', 'Make sure they all accept'),
+  (9, 1, 1, 'Confirm Photographer', 'Marianne Rothbauer'),
+  (9, 0, 1, 'Venue Booking', 'The Country House Hotel'),
+  (10, 0, 1, 'Invitations', 'Design and cost'),
+  (11, 0, 1, 'DJ', 'The Beatmeister Wedding DJ - 416-459-3579'),
+  (12, 0, 1, 'Deposit for rings', 'Vaughan Vintage and Specialty Jewellery');
 
 
 

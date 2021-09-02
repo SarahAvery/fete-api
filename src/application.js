@@ -52,6 +52,10 @@ module.exports = function application(
   app.use("/api/login", login(db));
   app.use("/api/register", register(db));
 
+  // FOR TESTING ONLY:
+  app.use("/api/board", board(db));
+
+
   if (ENV === "development" || ENV === "test") {
     Promise.all([
       read(path.resolve(__dirname, `db/schema/create.sql`)),
@@ -67,7 +71,7 @@ module.exports = function application(
 
   // protected
   app.use("/api/events", verifyToken, user_events(db));
-  app.use("/api/board", verifyToken, board(db));
+  // app.use("/api/board", verifyToken, board(db));
   app.use("/api/user", verifyToken, user(db));
 
   app.close = function () {

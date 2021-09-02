@@ -32,7 +32,7 @@ module.exports = (db) => {
     )
       .then((data) => {
         const events = data.rows;
-        console.log(events);
+        // console.log(events);
         res.json(events);
       })
       .catch((err) => {
@@ -63,11 +63,41 @@ module.exports = (db) => {
       VALUES
         ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id)
       INSERT INTO users_events (user_id, event_id)
-      VALUES ($13, (SELECT id FROM event_key));
+      VALUES ($13, (SELECT id FROM event_key))
+            RETURNING event_id, title;
         `,
       values
     )
-      .then((data) => res.sendStatus(200))
+      .then((data) => {
+        console.log(
+          "data.rows[0].event_id in server-side: ",
+          data.rows[0].event_id
+        );
+        const event_id = data.rows[0].event_id;
+        const event_title = data.rows[0].title;
+        db.query(
+          `
+          WITH board_key AS 
+            (INSERT INTO boards (event_id, title)
+            VALUES ($1, $2) RETURNING id),
+          INSERT INTO swimlanes (board_id, status, title)
+          VALUES
+            ((SELECT id FROM board_key), 1, 'To Do'),
+            ((SELECT id FROM board_key), 1, 'Follow Up'),
+            ((SELECT id FROM board_key), 1, 'Pending Approval'),
+            ((SELECT id FROM board_key), 1, 'Approved'),
+            ((SELECT id FROM board_key), 1, 'Booked'),
+            ((SELECT id FROM board_key), 1, 'Billed'),
+            ((SELECT id FROM board_key), 1, 'Paid')
+          RETURNING id;
+          `,
+          [event_id, event_title]
+        )
+        .then((second) => {
+          console.log("second in API call: ", second);
+          res.sendStatus(200);
+        });
+      })
       .catch((err) => res.status(500).json({ error: err.message }));
   });
 
