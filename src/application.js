@@ -16,13 +16,13 @@ const register = require("./routes/register");
 const user_events = require("./routes/users_events");
 const user = require("./routes/user");
 const board = require("./routes/board");
+const task = require("./routes/task");
 
 // Separated API Reset route:
 const reset = require("./routes/reset");
 
 // JWT check for all protected routes
 const verifyToken = require("./validate-token");
-
 
 function read(file) {
   return new Promise((resolve, reject) => {
@@ -69,6 +69,7 @@ module.exports = function application(
   app.use("/api/events", verifyToken, user_events(db));
   app.use("/api/board", verifyToken, board(db));
   app.use("/api/user", verifyToken, user(db));
+  app.use("/api/task", verifyToken, task(db));
 
   app.close = function () {
     return db.end();
