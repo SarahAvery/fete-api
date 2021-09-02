@@ -11,15 +11,19 @@ module.exports = (db) => {
         swimlanes.id,
         swimlanes.title,
         JSON_AGG( 
-          json_build_object(
+        CASE WHEN tasks.id IS NULL
+        THEN 'null'
+        ELSE
+        json_build_object(
             'id', tasks.id, 
             'title', tasks.title, 
             'content', tasks.content,
             'order', tasks.task_order
           )
-        ) AS items
+          END
+        )AS items
         FROM tasks
-        INNER JOIN swimlanes
+        RIGHT JOIN swimlanes
         ON swimlane_id = swimlanes.id
         INNER JOIN boards
         ON board_id = boards.id
