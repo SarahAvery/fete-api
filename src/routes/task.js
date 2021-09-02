@@ -26,7 +26,7 @@ module.exports = (db) => {
 
   // Update task to db
   router.post("/:eventId/update", async (req, res) => {
-    console.log(req.body, req.params, req.query);
+    // console.log(req.body, req.params, req.query);
 
     const { id, title, content } = req.body;
 
@@ -48,7 +48,7 @@ module.exports = (db) => {
 
   // Delete task to db
   router.post("/:eventId/delete", async (req, res) => {
-    console.log(req.body, req.params, req.query);
+    // console.log(req.body, req.params, req.query);
 
     const { id } = req.body;
 
