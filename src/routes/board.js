@@ -70,19 +70,19 @@ module.exports = (db) => {
     }
   });
 
-  // Add task to db
-  router.post("/:eventId/add", async (req, res) => {
+  // Update Column Name
+  router.post("/:eventId/updateCol", async (req, res) => {
     console.log(req.body, req.params, req.query);
 
-    const [order, columnId, status, title, content] = req.body;
+    const { id, title } = req.body;
 
-    // !!!!! SWIMLANE NEEDS TO BE CHANGED TO COLUMN
     db.query(
       `
-    INSERT into tasks(task_order, swimlane_id, status, title, content)
-    VALUES ($1, $2, $3, $4, $5);
-    `,
-      [order, parseInt(columnId), status, title, content]
+      UPDATE swimlanes
+      SET title = $1
+      WHERE id = $2
+    ;`,
+      [title, id]
     )
       .then((tasksData) => {
         res.sendStatus(200);
