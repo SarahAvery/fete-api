@@ -72,8 +72,6 @@ module.exports = (db) => {
 
   // Add task to db
   router.post("/:eventId/add", async (req, res) => {
-    console.log(req.body, req.params, req.query);
-
     const [order, columnId, status, title, content] = req.body;
 
     // !!!!! SWIMLANE NEEDS TO BE CHANGED TO COLUMN

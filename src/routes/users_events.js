@@ -32,7 +32,6 @@ module.exports = (db) => {
     )
       .then((data) => {
         const events = data.rows;
-        // console.log(events);
         res.json(events);
       })
       .catch((err) => {
@@ -90,7 +89,6 @@ module.exports = (db) => {
       values
     )
       .then((status) => {
-        console.log("status in API call: ", status);
         res.sendStatus(200);
       })
       .catch((err) => res.status(500).json({ error: err.message }));
