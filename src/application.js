@@ -52,9 +52,6 @@ module.exports = function application(
   app.use("/api/login", login(db));
   app.use("/api/register", register(db));
 
-  // FOR TESTING ONLY:
-  app.use("/api/board", board(db));
-
 
   if (ENV === "development" || ENV === "test") {
     Promise.all([
@@ -71,7 +68,7 @@ module.exports = function application(
 
   // protected
   app.use("/api/events", verifyToken, user_events(db));
-  // app.use("/api/board", verifyToken, board(db));
+  app.use("/api/board", verifyToken, board(db));
   app.use("/api/user", verifyToken, user(db));
   app.use("/api/task", verifyToken, task(db));
 
