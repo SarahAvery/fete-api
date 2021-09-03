@@ -97,13 +97,8 @@ module.exports = (db) => {
 
   // Update an event for this user
   router.post("/:eventId/update", async (req, res) => {
-
-    console.log('req.body in users_events: ', req.body)
-
     const values = Object.values(req.body.data);
-    console.log('values before push: ', values)
     values.push(req.body.event)
-    console.log('values after push: ', values)
     
     // $13 is the event.id
     db.query(
