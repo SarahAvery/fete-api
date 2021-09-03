@@ -94,18 +94,55 @@ module.exports = (db) => {
       .catch((err) => res.status(500).json({ error: err.message }));
   });
 
+
+  // Update an event for this user
+  router.post("/:eventId/update", async (req, res) => {
+
+    console.log('req.body in users_events: ', req.body)
+
+    const values = Object.values(req.body.data);
+    console.log('values before push: ', values)
+    values.push(req.body.event)
+    console.log('values after push: ', values)
+    
+    // $13 is the event.id
+    db.query(
+      `UPDATE events SET 
+        title         = $1,
+        first_name    = $2,
+        second_name   = $3,
+        event_date    = $4,
+        email         = $5,
+        phone         = $6,
+        unit          = $7,
+        street_number = $8,
+        street_name   = $9,
+        street_type   = $10,
+        postal_code   = $11,
+        city          = $12
+      WHERE id = $13;`,
+      values
+    )
+    .then((status) => {
+      res.sendStatus(200);
+    })
+    .catch((err) => res.status(500).json({ error: err.message }));
+
+  });
+
+
   // Delete an event for this user - Will be called by delete option on ellipsis menu of each event displayed on Dashboard
-  router.delete("/:eventId/delete", (req, res) => {
+  router.post("/:eventId/delete", (req, res) => {
+    console.log('here in API call')
+    console.log('req.body: ', req.body.id)
     db.query(
       `
-      DELETE FROM events WHERE events.id = $1::integer
+      DELETE FROM events WHERE events.id = $1::integer;
         `,
-      [req.event.id]
+      [req.body.id]
     )
       .then((data) => {
-        // const events = data.rows;
-        // console.log(events);
-        // res.json(events);
+        res.sendStatus(200);
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
