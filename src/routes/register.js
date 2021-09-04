@@ -51,6 +51,9 @@ module.exports = (db) => {
           process.env.ACCESS_TOKEN_SECRET
         );
         res.send({ accessToken: accessToken });
+      })
+      .catch((err) => {
+        return res.status(500).json({ error: err.message });
       });
   });
 
