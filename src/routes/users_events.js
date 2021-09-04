@@ -128,8 +128,6 @@ module.exports = (db) => {
 
   // Delete an event for this user - Will be called by delete option on ellipsis menu of each event displayed on Dashboard
   router.post("/:eventId/delete", (req, res) => {
-    console.log('here in API call')
-    console.log('req.body: ', req.body.id)
     db.query(
       `
       DELETE FROM events WHERE events.id = $1::integer;
