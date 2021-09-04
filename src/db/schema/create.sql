@@ -27,8 +27,8 @@ CREATE TABLE events (
   postal_code VARCHAR(7) NOT NULL,
   city VARCHAR(255) NOT NULL,
   date_created TIMESTAMPTZ DEFAULT now(),
-  expense_budget INTEGER,
-  expense_actual INTEGER,
+  expense_budget INTEGER DEFAULT 0,
+  expense_actual INTEGER DEFAULT 0,
   percentage INTEGER
 );
 
@@ -59,8 +59,8 @@ CREATE TABLE tasks (
   status TEXT NOT NULL,
   title TEXT NOT NULL,
   content TEXT,
-  expense_budget INTEGER,
-  expense_actual INTEGER,
+  expense_budget INTEGER DEFAULT 0,
+  expense_actual INTEGER DEFAULT 0,
   date_due TIMESTAMPTZ
 );
 
