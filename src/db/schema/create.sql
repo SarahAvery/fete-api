@@ -4,8 +4,6 @@ DROP TABLE IF EXISTS events CASCADE;
 DROP TABLE IF EXISTS boards CASCADE;
 DROP TABLE IF EXISTS swimlanes CASCADE;
 DROP TABLE IF EXISTS tasks CASCADE;
--- DROP TABLE IF EXISTS vendors_events CASCADE;
--- DROP TABLE IF EXISTS vendors CASCADE;
 
 CREATE TABLE users (
   id SERIAL PRIMARY KEY NOT NULL,
@@ -29,6 +27,8 @@ CREATE TABLE events (
   postal_code VARCHAR(7) NOT NULL,
   city VARCHAR(255) NOT NULL,
   date_created TIMESTAMPTZ DEFAULT now(),
+  expense_budget INTEGER,
+  expense_actual INTEGER,
   percentage INTEGER
 );
 
@@ -59,25 +59,8 @@ CREATE TABLE tasks (
   status TEXT NOT NULL,
   title TEXT NOT NULL,
   content TEXT,
+  expense_budget INTEGER,
+  expense_actual INTEGER,
   date_due TIMESTAMPTZ
 );
 
--- CREATE TABLE vendors_events (
---   id SERIAL PRIMARY KEY NOT NULL,
---   vendor_id INTEGER REFERENCES vendors(id) ON DELETE CASCADE,
---   event_id INTEGER REFERENCES events(id) ON DELETE CASCADE,
---   vendor_type TEXT
--- );
-
--- CREATE TABLE vendors (
---   id SERIAL PRIMARY KEY NOT NULL,
---   business_name VARCHAR(255) NOT NULL,
---   contact_name VARCHAR(255) NOT NULL,
---   email VARCHAR(225) NOT NULL,
---   phone_number VARCHAR(20),
---   street_number VARCHAR(10) NOT NULL,
---   street_name VARCHAR(255) NOT NULL,
---   city VARCHAR(255) NOT NULL,
---   postal_code VARCHAR(7) NOT NULL,
---   website_url VARCHAR(255)
--- );
