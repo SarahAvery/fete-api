@@ -22,6 +22,8 @@ module.exports = (db) => {
           street_type,
           postal_code,
           city,
+          expense_budget,
+          expense_actual,
           percentage
         FROM events
         INNER JOIN users_events
@@ -42,7 +44,8 @@ module.exports = (db) => {
   // Add a new event for this user - Will be called by submission of 'add new event' form
   router.post("/add", (req, res) => {
     const values = Object.values(req.body);
-    // $13 is the userId
+    console.log('values in users_events: ', values)
+    // $14 is the userId
     db.query(
       `
       WITH 
@@ -59,15 +62,16 @@ module.exports = (db) => {
             street_name,
             street_type,
             postal_code,
-            city)
+            city,
+            expense_budget)
           VALUES
-            ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) 
+            ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) 
           RETURNING id),   
         users_events_key AS
           (INSERT INTO users_events 
             (user_id, event_id)
           VALUES 
-            ($13, (SELECT id FROM events_key))
+            ($14, (SELECT id FROM events_key))
           RETURNING id),
         board_key AS
           (INSERT INTO boards 
