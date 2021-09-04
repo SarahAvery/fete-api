@@ -72,7 +72,6 @@ module.exports = (db) => {
 
   // Update Column Name
   router.post("/:eventId/updateCol", async (req, res) => {
-    console.log(req.body, req.params, req.query);
 
     const { id, title } = req.body;
 
