@@ -5,15 +5,15 @@ module.exports = (db) => {
   // Add task to db
   router.post("/:eventId/add", async (req, res) => {
 
-    const [order, columnId, status, title, content] = req.body;
+    const [order, columnId, status, title, content, expense_budget, expense_actual] = req.body;
 
     // !!!!! SWIMLANE NEEDS TO BE CHANGED TO COLUMN
     db.query(
       `
-    INSERT into tasks(task_order, swimlane_id, status, title, content)
-    VALUES ($1, $2, $3, $4, $5);
+    INSERT into tasks(task_order, swimlane_id, status, title, content, expense_budget, expense_actual)
+    VALUES ($1, $2, $3, $4, $5, $6, $7);
     `,
-      [order, parseInt(columnId), status, title, content]
+      [order, parseInt(columnId), status, title, content, expense_budget, expense_actual]
     )
       .then((tasksData) => {
         res.sendStatus(200);
