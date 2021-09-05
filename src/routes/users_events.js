@@ -72,6 +72,51 @@ module.exports = (db) => {
       });
       const finalEventsData = await Promise.all(finalEvents);
 
+      console.log('finalEventsData: ', finalEventsData)
+
+      /*
+      finalEventsData:  [
+        {
+          event_id: 1,
+          title: 'F&G wedding',
+          first_name: 'Frank Alistair',
+          second_name: 'Georgia Green',
+          event_date: 2016-06-23T02:10:25.000Z,
+          email: 'fngwedding@email.com',
+          phone: '4168261456',
+          unit: '23A',
+          street_number: '145',
+          street_name: 'Brooklands',
+          street_type: 'Place',
+          postal_code: 'M2X 4W9',
+          city: 'Cityville',
+          expense_budget: 5000,
+          expense_actual: 0,
+          total_tasks: '9',
+          completed_tasks: '1'
+        },
+        {
+          event_id: 2,
+          title: 'Lucy & Kate',
+          first_name: 'Lucy Watson',
+          second_name: 'Kate Lincoln',
+          event_date: 2016-06-23T02:10:25.000Z,
+          email: 'gettingmarried@email.com',
+          phone: '4161649826',
+          unit: 'Suite 2306',
+          street_number: '4873',
+          street_name: 'Astor',
+          street_type: 'Drive',
+          postal_code: 'L7R 1K8',
+          city: 'Townsville',
+          expense_budget: 15000,
+          expense_actual: 0,
+          total_tasks: '10',
+          completed_tasks: '1'
+        }
+      ]
+      */
+
       res.json(finalEventsData);
     } catch (err) {
       res.status(500).json({ error: err.message });
