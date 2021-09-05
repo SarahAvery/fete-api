@@ -102,31 +102,33 @@ module.exports = (db) => {
   // Update an event for this user
   router.post("/:eventId/update", async (req, res) => {
     const values = Object.values(req.body.data);
+    // console.log('values before push: ', values)
     values.push(req.body.event)
+    // console.log('values after push: ', values)
     
-    // $13 is the event.id
+    // $14 is the event.id
     db.query(
       `UPDATE events SET 
-        title         = $1,
-        first_name    = $2,
-        second_name   = $3,
-        event_date    = $4,
-        email         = $5,
-        phone         = $6,
-        unit          = $7,
-        street_number = $8,
-        street_name   = $9,
-        street_type   = $10,
-        postal_code   = $11,
-        city          = $12
-      WHERE id = $13;`,
+        title           = $1,
+        first_name      = $2,
+        second_name     = $3,
+        event_date      = $4,
+        email           = $5,
+        phone           = $6,
+        unit            = $7,
+        street_number   = $8,
+        street_name     = $9,
+        street_type     = $10,
+        postal_code     = $11,
+        city            = $12,
+        expense_budget  = $13
+      WHERE id = $14;`,
       values
     )
     .then((status) => {
       res.sendStatus(200);
     })
     .catch((err) => res.status(500).json({ error: err.message }));
-
   });
 
 
