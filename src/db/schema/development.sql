@@ -18,22 +18,22 @@ VALUES
   (1, 'F&G wedding'),
   (2, 'L&K wedding');
 
-INSERT INTO swimlanes (board_id, status, title)
+INSERT INTO swimlanes (board_id, status, title, is_last)
 VALUES
-  (1, 1, 'To Do'),
-  (1, 1, 'Follow Up'),
-  (1, 1, 'Pending Approval'),
-  (1, 1, 'Approved'),
-  (1, 1, 'Booked'),
-  (1, 1, 'Billed'),
-  (1, 1, 'Paid'),
-  (2, 1, 'To Do'),
-  (2, 1, 'Follow Up'),
-  (2, 1, 'Pending Approval'),
-  (2, 1, 'Approved'),
-  (2, 1, 'Booked'),
-  (2, 1, 'Billed'),
-  (2, 1, 'Paid');
+  (1, 1, 'To Do', DEFAULT),
+  (1, 1, 'Follow Up', DEFAULT),
+  (1, 1, 'Pending Approval', DEFAULT),
+  (1, 1, 'Approved', DEFAULT),
+  (1, 1, 'Booked', DEFAULT),
+  (1, 1, 'Billed', DEFAULT),
+  (1, 1, 'Complete', true),
+  (2, 1, 'To Do', DEFAULT),
+  (2, 1, 'Follow Up', DEFAULT),
+  (2, 1, 'Pending Approval', DEFAULT),
+  (2, 1, 'Approved', DEFAULT),
+  (2, 1, 'Booked', DEFAULT),
+  (2, 1, 'Billed', DEFAULT),
+  (2, 1, 'Complete', true);
 
 INSERT INTO tasks (swimlane_id, task_order, status, title, content)
 VALUES
