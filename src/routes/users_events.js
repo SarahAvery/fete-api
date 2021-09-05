@@ -3,11 +3,12 @@ const router = express.Router();
 
 module.exports = (db) => {
   // Get all events for a user
-  router.get("/", (req, res) => {
+  router.get("/", async (req, res) => {
     if (!req.user.id) res.status(404).json({ error: "User id not provided" });
 
-    db.query(
-      `
+    try {
+      const eventsQuery = await db.query(
+        `
         SELECT 
           events.id AS event_id,
           title,
@@ -21,27 +22,84 @@ module.exports = (db) => {
           street_name,
           street_type,
           postal_code,
-          city,
-          percentage
+          city
         FROM events
         INNER JOIN users_events
         ON events.id = event_id
         WHERE user_id = $1;
         `,
-      [req.user.id]
-    )
-      .then((data) => {
-        const events = data.rows;
-        res.json(events);
-      })
-      .catch((err) => {
-        res.status(500).json({ error: err.message });
+        [req.user.id]
+      );
+      const eventsData = await eventsQuery.rows;
+      const totalTasksPerEvent = await Promise.all(
+        eventsData.map((event) =>
+          db.query(
+            `
+            SELECT count(tasks) AS total_tasks
+            FROM tasks
+            RIGHT JOIN swimlanes
+            ON swimlane_id = swimlanes.id
+            INNER JOIN boards
+            ON board_id = boards.id
+            WHERE event_id = $1;
+            `,
+            [event.event_id]
+          )
+        )
+      );
+      const eventsWithTotalTasks = eventsData.map((event, index) => {
+        event.total_tasks = totalTasksPerEvent[index].rows[0].total_tasks;
+        return event;
       });
+
+      const finalEvents = await eventsWithTotalTasks.map(async (event) => {
+        const completedTasksQuery = await db.query(
+          `
+            SELECT count(tasks) AS completed_tasks
+            FROM tasks
+            RIGHT JOIN swimlanes
+            ON swimlane_id = swimlanes.id
+            INNER JOIN boards
+            ON board_id = boards.id
+            WHERE event_id = $1 and swimlanes.is_last = true;`,
+          [event.event_id]
+        );
+
+        event.completed_tasks = completedTasksQuery.rows[0].completed_tasks;
+        return event;
+      });
+      const finalEventsData = await Promise.all(finalEvents);
+
+      res.json(finalEventsData);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
   });
+
+  // Total tasks count
+  //   SELECT count(tasks) AS num_of_tasks
+  // FROM tasks
+  // RIGHT JOIN swimlanes
+  // ON swimlane_id = swimlanes.id
+  // INNER JOIN boards
+  // ON board_id = boards.id
+  // WHERE event_id = $1
+
+  // Total completed tasks
+  //   SELECT count(tasks) AS num_of_tasks
+  //  FROM tasks
+  //  RIGHT JOIN swimlanes
+  //  ON swimlane_id = swimlanes.id
+  //  INNER JOIN boards
+  //  ON board_id = boards.id
+  // WHERE event_id = $1 and swimlanes.is_last = true
 
   // Add a new event for this user - Will be called by submission of 'add new event' form
   router.post("/add", (req, res) => {
+    console.log(req.body);
     const values = Object.values(req.body);
+    // values.unit = req.body.unit || null;
+    console.log("values ", values);
     // $13 is the userId
     db.query(
       `
@@ -76,15 +134,15 @@ module.exports = (db) => {
             ((SELECT id FROM events_key), $1)
           RETURNING id)  
           INSERT INTO swimlanes 
-            (board_id, status, title)
+            (board_id, status, title, is_last)
           VALUES
-            ((SELECT id FROM board_key), 1, 'To Do'),
-            ((SELECT id FROM board_key), 1, 'Follow Up'),
-            ((SELECT id FROM board_key), 1, 'Pending Approval'),
-            ((SELECT id FROM board_key), 1, 'Approved'),
-            ((SELECT id FROM board_key), 1, 'Booked'),
-            ((SELECT id FROM board_key), 1, 'Billed'),
-            ((SELECT id FROM board_key), 1, 'Paid');
+            ((SELECT id FROM board_key), 1, 'To Do', DEFAULT),
+            ((SELECT id FROM board_key), 1, 'Follow Up', DEFAULT),
+            ((SELECT id FROM board_key), 1, 'Pending Approval', DEFAULT),
+            ((SELECT id FROM board_key), 1, 'Approved', DEFAULT),
+            ((SELECT id FROM board_key), 1, 'Booked', DEFAULT),
+            ((SELECT id FROM board_key), 1, 'Billed', DEFAULT),
+            ((SELECT id FROM board_key), 1, 'Complete', TRUE);
         `,
       values
     )
@@ -94,12 +152,11 @@ module.exports = (db) => {
       .catch((err) => res.status(500).json({ error: err.message }));
   });
 
-
   // Update an event for this user
   router.post("/:eventId/update", async (req, res) => {
     const values = Object.values(req.body.data);
-    values.push(req.body.event)
-    
+    values.push(req.body.event);
+
     // $13 is the event.id
     db.query(
       `UPDATE events SET 
@@ -118,13 +175,11 @@ module.exports = (db) => {
       WHERE id = $13;`,
       values
     )
-    .then((status) => {
-      res.sendStatus(200);
-    })
-    .catch((err) => res.status(500).json({ error: err.message }));
-
+      .then((status) => {
+        res.sendStatus(200);
+      })
+      .catch((err) => res.status(500).json({ error: err.message }));
   });
-
 
   // Delete an event for this user - Will be called by delete option on ellipsis menu of each event displayed on Dashboard
   router.post("/:eventId/delete", (req, res) => {

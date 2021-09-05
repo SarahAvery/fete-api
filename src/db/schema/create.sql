@@ -28,8 +28,7 @@ CREATE TABLE events (
   street_type TEXT NOT NULL,
   postal_code VARCHAR(7) NOT NULL,
   city VARCHAR(255) NOT NULL,
-  date_created TIMESTAMPTZ DEFAULT now(),
-  percentage INTEGER
+  date_created TIMESTAMPTZ DEFAULT now()
 );
 
 CREATE TABLE users_events (
@@ -48,7 +47,8 @@ CREATE TABLE swimlanes (
   id SERIAL PRIMARY KEY NOT NULL,
   board_id INTEGER REFERENCES boards(id) ON DELETE CASCADE,
   status TEXT NOT NULL,
-  title varchar(50) NOT NULL
+  title varchar(50) NOT NULL,
+  is_last BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE tasks (
