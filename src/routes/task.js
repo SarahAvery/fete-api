@@ -26,15 +26,18 @@ module.exports = (db) => {
   // Update task to db
   router.post("/:eventId/update", async (req, res) => {
 
-    const { id, title, content } = req.body;
+    const { id, title, content, expense_budget, expense_actual } = req.body;
 
     db.query(
       `
       UPDATE tasks
-      SET title = $1, content = $2
+        SET title = $1,
+        content = $2,
+        expense_budget = $4,
+        expense_actual = $5
       WHERE id = $3;
     `,
-      [title, content, id]
+      [title, content, id, expense_budget, expense_actual]
     )
       .then((tasksData) => {
         res.sendStatus(200);
