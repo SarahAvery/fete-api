@@ -18,7 +18,9 @@ module.exports = (db) => {
             'id', tasks.id, 
             'title', tasks.title, 
             'content', tasks.content,
-            'order', tasks.task_order
+            'order', tasks.task_order,
+            'expense_budget', tasks.expense_budget,
+            'expense_actual', tasks.expense_actual
           )
           END
         )AS items
