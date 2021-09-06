@@ -72,7 +72,7 @@ module.exports = (db) => {
       });
       const finalEventsData = await Promise.all(finalEvents);
 
-      console.log('finalEventsData: ', finalEventsData)
+      // console.log('finalEventsData: ', finalEventsData)
 
       /*
       finalEventsData:  [
@@ -172,10 +172,10 @@ module.exports = (db) => {
         )
       );
       const eventWithTotalTasks = eventData.map((event, index) => {
-        console.log('totalTasksPerEvent in users_events: ', totalTasksPerEvent.rows)
+        // console.log('totalTasksPerEvent in users_events: ', totalTasksPerEvent.rows)
 
         eventData.total_tasks = totalTasksPerEvent[index].rows[0].total_tasks;
-        console.log('event in users_events: ', event)
+        // console.log('event in users_events: ', event)
         return event;
       });
 
@@ -197,7 +197,7 @@ module.exports = (db) => {
       });
       const finalEventData = await Promise.all(finalEvents);
 
-      console.log('finalEventData: ', finalEventData)
+      // console.log('finalEventData: ', finalEventData)
       res.json(finalEventData)
     } catch {
       res.status(500).json({ error: 'Error in single event get query - users_events.js' });
@@ -258,9 +258,9 @@ module.exports = (db) => {
 
   // Add a new event for this user - Will be called by submission of 'add new event' form
   router.post("/add", (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     const values = Object.values(req.body);
-    console.log('values in users_events: ', values)
+    // console.log('values in users_events: ', values)
     // $14 is the userId
     db.query(
       `
