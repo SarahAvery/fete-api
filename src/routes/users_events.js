@@ -21,7 +21,7 @@ module.exports = (db) => {
           street_number,
           street_name,
           street_type,
-          postal_code,
+        postal_code,
           city,
           expense_budget,
           expense_actual
@@ -140,6 +140,121 @@ module.exports = (db) => {
   //  INNER JOIN boards
   //  ON board_id = boards.id
   // WHERE event_id = $1 and swimlanes.is_last = true
+
+  // Get event data for a single event
+  router.get("/:eventId/single", async (req, res) => {
+    const eventId = req.params.eventId
+
+    try {
+      const eventsQuery = await db.query(
+        `
+        SELECT *
+        FROM events
+        WHERE id = $1;
+        `,
+        [eventId]
+        )
+      const eventData = await eventsQuery.rows;
+      const totalTasksPerEvent = await Promise.all(
+        eventData.map((event) =>
+          db.query(
+            `
+            SELECT count(tasks) AS total_tasks
+            FROM tasks
+            RIGHT JOIN swimlanes
+            ON swimlane_id = swimlanes.id
+            INNER JOIN boards
+            ON board_id = boards.id
+            WHERE event_id = $1;
+            `,
+            [eventId]
+          )
+        )
+      );
+      const eventWithTotalTasks = eventData.map((event, index) => {
+        console.log('totalTasksPerEvent in users_events: ', totalTasksPerEvent.rows)
+
+        eventData.total_tasks = totalTasksPerEvent[index].rows[0].total_tasks;
+        console.log('event in users_events: ', event)
+        return event;
+      });
+
+      const finalEvents = await eventWithTotalTasks.map(async (event) => {
+        const completedTasksQuery = await db.query(
+          `
+            SELECT count(tasks) AS completed_tasks
+            FROM tasks
+            RIGHT JOIN swimlanes
+            ON swimlane_id = swimlanes.id
+            INNER JOIN boards
+            ON board_id = boards.id
+            WHERE event_id = $1 and swimlanes.is_last = true;`,
+          [event.event_id]
+        );
+
+        event.completed_tasks = completedTasksQuery.rows[0].completed_tasks;
+        return event;
+      });
+      const finalEventData = await Promise.all(finalEvents);
+
+      console.log('finalEventData: ', finalEventData)
+      res.json(finalEventData)
+    } catch {
+      res.status(500).json({ error: 'Error in single event get query - users_events.js' });
+    }
+  });
+
+  /*
+  finalEventsData:  [
+    {
+      event_id: 1,
+      title: 'F&G wedding',
+      first_name: 'Frank Alistair',
+      second_name: 'Georgia Green',
+      event_date: 2016-06-23T02:10:25.000Z,
+      email: 'fngwedding@email.com',
+      phone: '4168261456',
+      unit: '23A',
+      street_number: '145',
+      street_name: 'Brooklands',
+      street_type: 'Place',
+      postal_code: 'M2X 4W9',
+      city: 'Cityville',
+      expense_budget: 5000,
+      expense_actual: 0,
+      total_tasks: '9',
+      completed_tasks: '1'
+    },
+    {
+      event_id: 2,
+      title: 'Lucy & Kate',
+      first_name: 'Lucy Watson',
+      second_name: 'Kate Lincoln',
+      event_date: 2016-06-23T02:10:25.000Z,
+      email: 'gettingmarried@email.com',
+      phone: '4161649826',
+      unit: 'Suite 2306',
+      street_number: '4873',
+      street_name: 'Astor',
+      street_type: 'Drive',
+      postal_code: 'L7R 1K8',
+      city: 'Townsville',
+      expense_budget: 15000,
+      expense_actual: 0,
+      total_tasks: '9',
+      completed_tasks: '0'
+    }
+  ]
+  */
+
+
+
+
+
+
+
+
+
 
   // Add a new event for this user - Will be called by submission of 'add new event' form
   router.post("/add", (req, res) => {
