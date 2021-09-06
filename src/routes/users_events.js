@@ -21,8 +21,10 @@ module.exports = (db) => {
           street_number,
           street_name,
           street_type,
-          postal_code,
-          city
+        postal_code,
+          city,
+          expense_budget,
+          expense_actual
         FROM events
         INNER JOIN users_events
         ON events.id = event_id
@@ -70,37 +72,129 @@ module.exports = (db) => {
       });
       const finalEventsData = await Promise.all(finalEvents);
 
+      // console.log('finalEventsData: ', finalEventsData)
+
+      /*
+      finalEventsData:  [
+        {
+          event_id: 1,
+          title: 'F&G wedding',
+          first_name: 'Frank Alistair',
+          second_name: 'Georgia Green',
+          event_date: 2016-06-23T02:10:25.000Z,
+          email: 'fngwedding@email.com',
+          phone: '4168261456',
+          unit: '23A',
+          street_number: '145',
+          street_name: 'Brooklands',
+          street_type: 'Place',
+          postal_code: 'M2X 4W9',
+          city: 'Cityville',
+          expense_budget: 5000,
+          expense_actual: 0,
+          total_tasks: '9',
+          completed_tasks: '1'
+        },
+        {
+          event_id: 2,
+          title: 'Lucy & Kate',
+          first_name: 'Lucy Watson',
+          second_name: 'Kate Lincoln',
+          event_date: 2016-06-23T02:10:25.000Z,
+          email: 'gettingmarried@email.com',
+          phone: '4161649826',
+          unit: 'Suite 2306',
+          street_number: '4873',
+          street_name: 'Astor',
+          street_type: 'Drive',
+          postal_code: 'L7R 1K8',
+          city: 'Townsville',
+          expense_budget: 15000,
+          expense_actual: 0,
+          total_tasks: '10',
+          completed_tasks: '1'
+        }
+      ]
+      */
+
       res.json(finalEventsData);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   });
 
-  // Total tasks count
-  //   SELECT count(tasks) AS num_of_tasks
-  // FROM tasks
-  // RIGHT JOIN swimlanes
-  // ON swimlane_id = swimlanes.id
-  // INNER JOIN boards
-  // ON board_id = boards.id
-  // WHERE event_id = $1
+  // BEGIN - Not currently being used. Will likely be removed:
+  // Get event data for a single event
+  router.get("/:eventId/single", async (req, res) => {
+    const eventId = req.params.eventId
 
-  // Total completed tasks
-  //   SELECT count(tasks) AS num_of_tasks
-  //  FROM tasks
-  //  RIGHT JOIN swimlanes
-  //  ON swimlane_id = swimlanes.id
-  //  INNER JOIN boards
-  //  ON board_id = boards.id
-  // WHERE event_id = $1 and swimlanes.is_last = true
+    try {
+      const eventsQuery = await db.query(
+        `
+        SELECT *
+        FROM events
+        WHERE id = $1;
+        `,
+        [eventId]
+        )
+      const eventData = await eventsQuery.rows;
+      const totalTasksPerEvent = await Promise.all(
+        eventData.map((event) =>
+          db.query(
+            `
+            SELECT count(tasks) AS total_tasks
+            FROM tasks
+            RIGHT JOIN swimlanes
+            ON swimlane_id = swimlanes.id
+            INNER JOIN boards
+            ON board_id = boards.id
+            WHERE event_id = $1;
+            `,
+            [eventId]
+          )
+        )
+      );
+      const eventWithTotalTasks = eventData.map((event, index) => {
+        // console.log('totalTasksPerEvent in users_events: ', totalTasksPerEvent.rows)
+
+        eventData.total_tasks = totalTasksPerEvent[index].rows[0].total_tasks;
+        // console.log('event in users_events: ', event)
+        return event;
+      });
+
+      const finalEvents = await eventWithTotalTasks.map(async (event) => {
+        const completedTasksQuery = await db.query(
+          `
+            SELECT count(tasks) AS completed_tasks
+            FROM tasks
+            RIGHT JOIN swimlanes
+            ON swimlane_id = swimlanes.id
+            INNER JOIN boards
+            ON board_id = boards.id
+            WHERE event_id = $1 and swimlanes.is_last = true;`,
+          [event.event_id]
+        );
+
+        event.completed_tasks = completedTasksQuery.rows[0].completed_tasks;
+        return event;
+      });
+      const finalEventData = await Promise.all(finalEvents);
+
+      // console.log('finalEventData: ', finalEventData)
+      res.json(finalEventData)
+    } catch {
+      res.status(500).json({ error: 'Error in single event get query - users_events.js' });
+    }
+  });
+  // BEGIN - Not currently being used. Will likely be removed:
+
 
   // Add a new event for this user - Will be called by submission of 'add new event' form
   router.post("/add", (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     const values = Object.values(req.body);
-    // values.unit = req.body.unit || null;
-    console.log("values ", values);
-    // $13 is the userId
+    // console.log('values in users_events: ', values)
+    // $14 is the userId
     db.query(
       `
       WITH 
@@ -117,15 +211,16 @@ module.exports = (db) => {
             street_name,
             street_type,
             postal_code,
-            city)
+            city,
+            expense_budget)
           VALUES
-            ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) 
+            ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) 
           RETURNING id),   
         users_events_key AS
           (INSERT INTO users_events 
             (user_id, event_id)
           VALUES 
-            ($13, (SELECT id FROM events_key))
+            ($14, (SELECT id FROM events_key))
           RETURNING id),
         board_key AS
           (INSERT INTO boards 
@@ -155,30 +250,33 @@ module.exports = (db) => {
   // Update an event for this user
   router.post("/:eventId/update", async (req, res) => {
     const values = Object.values(req.body.data);
-    values.push(req.body.event);
-
-    // $13 is the event.id
+    // console.log('values before push: ', values)
+    values.push(req.body.event)
+    // console.log('values after push: ', values)
+    
+    // $14 is the event.id
     db.query(
       `UPDATE events SET 
-        title         = $1,
-        first_name    = $2,
-        second_name   = $3,
-        event_date    = $4,
-        email         = $5,
-        phone         = $6,
-        unit          = $7,
-        street_number = $8,
-        street_name   = $9,
-        street_type   = $10,
-        postal_code   = $11,
-        city          = $12
-      WHERE id = $13;`,
+        title           = $1,
+        first_name      = $2,
+        second_name     = $3,
+        event_date      = $4,
+        email           = $5,
+        phone           = $6,
+        unit            = $7,
+        street_number   = $8,
+        street_name     = $9,
+        street_type     = $10,
+        postal_code     = $11,
+        city            = $12,
+        expense_budget  = $13
+      WHERE id = $14;`,
       values
     )
-      .then((status) => {
-        res.sendStatus(200);
-      })
-      .catch((err) => res.status(500).json({ error: err.message }));
+    .then((status) => {
+      res.sendStatus(200);
+    })
+    .catch((err) => res.status(500).json({ error: err.message }));
   });
 
   // Delete an event for this user - Will be called by delete option on ellipsis menu of each event displayed on Dashboard

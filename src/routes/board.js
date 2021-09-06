@@ -11,16 +11,18 @@ module.exports = (db) => {
         swimlanes.id,
         swimlanes.title,
         JSON_AGG( 
-        CASE WHEN tasks.id IS NULL
-        THEN 'null'
-        ELSE
-        json_build_object(
-            'id', tasks.id, 
-            'title', tasks.title, 
-            'content', tasks.content,
-            'order', tasks.task_order
-          )
-          END
+          CASE WHEN tasks.id IS NULL
+          THEN 'null'
+          ELSE
+            json_build_object(
+                'id', tasks.id, 
+                'title', tasks.title, 
+                'content', tasks.content,
+                'order', tasks.task_order,
+                'expense_budget', tasks.expense_budget,
+                'expense_actual', tasks.expense_actual
+              )
+            END
         )AS items
         FROM tasks
         RIGHT JOIN swimlanes
@@ -40,7 +42,7 @@ module.exports = (db) => {
 
       res.json({
         title: eventData.rows[0].title,
-        items: tasksData.rows
+        items: tasksData.rows,
       });
     } catch (err) {
       res.sendStatus(500).json({ error: err.message });
@@ -72,7 +74,6 @@ module.exports = (db) => {
 
   // Update Column Name
   router.post("/:eventId/updateCol", async (req, res) => {
-
     const { id, title } = req.body;
 
     db.query(
