@@ -123,24 +123,7 @@ module.exports = (db) => {
     }
   });
 
-  // Total tasks count
-  //   SELECT count(tasks) AS num_of_tasks
-  // FROM tasks
-  // RIGHT JOIN swimlanes
-  // ON swimlane_id = swimlanes.id
-  // INNER JOIN boards
-  // ON board_id = boards.id
-  // WHERE event_id = $1
-
-  // Total completed tasks
-  //   SELECT count(tasks) AS num_of_tasks
-  //  FROM tasks
-  //  RIGHT JOIN swimlanes
-  //  ON swimlane_id = swimlanes.id
-  //  INNER JOIN boards
-  //  ON board_id = boards.id
-  // WHERE event_id = $1 and swimlanes.is_last = true
-
+  // BEGIN - Not currently being used. Will likely be removed:
   // Get event data for a single event
   router.get("/:eventId/single", async (req, res) => {
     const eventId = req.params.eventId
@@ -203,57 +186,7 @@ module.exports = (db) => {
       res.status(500).json({ error: 'Error in single event get query - users_events.js' });
     }
   });
-
-  /*
-  finalEventsData:  [
-    {
-      event_id: 1,
-      title: 'F&G wedding',
-      first_name: 'Frank Alistair',
-      second_name: 'Georgia Green',
-      event_date: 2016-06-23T02:10:25.000Z,
-      email: 'fngwedding@email.com',
-      phone: '4168261456',
-      unit: '23A',
-      street_number: '145',
-      street_name: 'Brooklands',
-      street_type: 'Place',
-      postal_code: 'M2X 4W9',
-      city: 'Cityville',
-      expense_budget: 5000,
-      expense_actual: 0,
-      total_tasks: '9',
-      completed_tasks: '1'
-    },
-    {
-      event_id: 2,
-      title: 'Lucy & Kate',
-      first_name: 'Lucy Watson',
-      second_name: 'Kate Lincoln',
-      event_date: 2016-06-23T02:10:25.000Z,
-      email: 'gettingmarried@email.com',
-      phone: '4161649826',
-      unit: 'Suite 2306',
-      street_number: '4873',
-      street_name: 'Astor',
-      street_type: 'Drive',
-      postal_code: 'L7R 1K8',
-      city: 'Townsville',
-      expense_budget: 15000,
-      expense_actual: 0,
-      total_tasks: '9',
-      completed_tasks: '0'
-    }
-  ]
-  */
-
-
-
-
-
-
-
-
+  // BEGIN - Not currently being used. Will likely be removed:
 
 
   // Add a new event for this user - Will be called by submission of 'add new event' form
