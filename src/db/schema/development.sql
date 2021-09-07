@@ -115,28 +115,22 @@ VALUES
   (32,	0,	1,	'Get Marriage License',	'10 days prior',	160,	160),
   (36,	1,	1,	'Get Marriage License',	'10 days prior',	160,	160),
   (37,	0,	1,	'Outdoor tent & seating',	'20 x 40 tent seating for 80',	3100,	3200),
-  (38,	0,	1,	'Lighting',	'Event lighting rental - warm glow string lights',	600,	550);
-
-INSERT INTO tasks (swimlane_id, task_order, status, title, content, expense_budget)
-VALUES
-  (2,	0,	1,	'Staffing',	'Confirm availability and head count',	1250),
-  (2,	3,	1,	'Choose Menu',	'Undecided on soup starter. 4 Vegetarians. 3 Vegans',	2500),
-  (3,	2,	1,	'Cake',	'Bakerbots or Milkbar',	800),
-  (14,	2,	1,	'Meet with officient', 'Randy 1-800-WED-DING',	200),
-  (15,	0,	1,	'Choose Flowers',	'Euro Flowers',	1500),
-  (16,	1,	1,	'Confirm Photographer',	'Marianne Rothbauer',	3000),
-  (22,	0,	1,	'Choose Flowers',	'Euro Flowers',	1500),
-  (22,	2,	1,	'Choose Menu',	'Undecided on soup starter. 4 Vegetarians. 3 Vegans',	2500),
-  (23,	0,	1,	'Transportation',	'Book transportation for immediate family',	1500),
-  (23,	1,	1,	'Meet with officient',	'Call Randy 1-800-WED-DING',	200),
-  (29,	2,	1,	'Confirm Photographer',	'Marianne Rothbauer',	3000),
-  (36,	0,	1,	'Confirm Photographer',	'Marianne Rothbauer',	3000);
-
-INSERT INTO tasks (swimlane_id, task_order, status, title, content)
-VALUES
-  (1,	2,	1,	'Call Grandma',	'Tell her not to die before the big day'),
-  (4,	1,	1,	'Seating Chart',	'Keep Uncle Jim far away from Aunt Stella'),
-  (2,	4,	1,	'Find Something Blue',	'Cousin to lend her brooch'),
-  (5,	1,	1,	'Vows',	'Check if they have written their vows'),
-  (26,	0,	1,	'Gift Registry',	'Gift Registry at Crate & Barrel');
+  (38,	0,	1,	'Lighting',	'Event lighting rental - warm glow string lights',	600,	550),
+  (2,	0,	1,	'Staffing',	'Confirm availability and head count',	1250, DEFAULT),
+  (2,	3,	1,	'Choose Menu',	'Undecided on soup starter. 4 Vegetarians. 3 Vegans',	2500, 0),
+  (3,	2,	1,	'Cake',	'Bakerbots or Milkbar',	800, DEFAULT),
+  (14,	2,	1,	'Meet with officient', 'Randy 1-800-WED-DING',	200, DEFAULT),
+  (15,	0,	1,	'Choose Flowers',	'Euro Flowers',	1500, DEFAULT),
+  (16,	1,	1,	'Confirm Photographer',	'Marianne Rothbauer',	3000, DEFAULT),
+  (22,	0,	1,	'Choose Flowers',	'Euro Flowers',	1500, DEFAULT),
+  (22,	2,	1,	'Choose Menu',	'Undecided on soup starter. 4 Vegetarians. 3 Vegans',	2500, DEFAULT),
+  (23,	0,	1,	'Transportation',	'Book transportation for immediate family',	1500, DEFAULT),
+  (23,	1,	1,	'Meet with officient',	'Call Randy 1-800-WED-DING',	200, DEFAULT),
+  (29,	2,	1,	'Confirm Photographer',	'Marianne Rothbauer',	3000, DEFAULT),
+  (36,	0,	1,	'Confirm Photographer',	'Marianne Rothbauer',	3000, DEFAULT),
+  (1,	2,	1,	'Call Grandma',	'Tell her not to die before the big day', DEFAULT, DEFAULT),
+  (4,	1,	1,	'Seating Chart',	'Keep Uncle Jim far away from Aunt Stella', DEFAULT, DEFAULT),
+  (2,	4,	1,	'Find Something Blue',	'Cousin to lend her brooch', DEFAULT, DEFAULT),
+  (5,	1,	1,	'Vows',	'Check if they have written their vows', DEFAULT, DEFAULT),
+  (26,	0,	1,	'Gift Registry',	'Gift Registry at Crate & Barrel', DEFAULT, DEFAULT);
 
