@@ -81,7 +81,7 @@ VALUES
   (1,	1,	1,	'Wedding Dress',	'Kleinfeld - 176 Yonge Street',	1800,	2100),
   (2,	1,	1,	'Confirm Photographer',	'Marianne Rothbauer',	3000,	2850),
   (3,	0,	1,	'Venue Booking',	'The Country House Hotel',	15000,	16872),
-  (4,	0,	1,	'Invitations',	'Design and cost',	100,	158),
+  (7,	0,	1,	'Invitations',	'Design and cost',	100,	158),
   (5,	0,	1,	'DJ',	'The Beatmeister Wedding DJ - 416-459-3579',	500,	500),
   (7,	0,	1,	'Deposit for rings',	'Vaughan Vintage and Specialty Jewellery',	200,	226),
   (7,	1,	1,	'Get Marriage License',	'10 days prior',	160,	160),
@@ -121,7 +121,7 @@ INSERT INTO tasks (swimlane_id, task_order, status, title, content, expense_budg
 VALUES
   (2,	0,	1,	'Staffing	Confirm', 'availability and head count',	1250),
   (2,	3,	1,	'Choose Menu',	'Undecided on soup starter. 4 Vegetarians. 3 Vegans',	2500),
-  (7,	2,	1,	'Cake',	'Bakerbots or Milkbar',	800),
+  (3,	2,	1,	'Cake',	'Bakerbots or Milkbar',	800),
   (14,	2,	1,	'Meet with officient', 'Randy 1-800-WED-DING',	200),
   (15,	0,	1,	'Choose Flowers',	'Euro Flowers',	1500),
   (16,	1,	1,	'Confirm Photographer',	'Marianne Rothbauer',	3000),
@@ -136,22 +136,7 @@ INSERT INTO tasks (swimlane_id, task_order, status, title, content)
 VALUES
   (1,	2,	1,	'Call Grandma',	'Tell her not to die before the big day'),
   (4,	1,	1,	'Seating Chart',	'Keep Uncle Jim far away from Aunt Stella'),
-  (2,	4,	1,	'Find Something', 'Blue	Cousin to lend her brooch'),
+  (2,	4,	1,	'Find Something Blue',	'Cousin to lend her brooch'),
   (5,	1,	1,	'Vows',	'Check if they have written their vows'),
   (26,	0,	1,	'Gift Registry',	'Gift Registry at Crate & Barrel');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
