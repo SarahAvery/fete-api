@@ -12,7 +12,6 @@ VALUES
   ('Reagan & Pacey',	'Reagan Leon',	'Pacey Wallace', '2022-01-01 22:10:25-04',	'r.leon@email.com',	'9056579824',	'null',	12,	'Oxford',	'Road',	'L1E 8A5',	'Courtice',	12500,	0),
   ('Claude & Carlise', 'Rayne	Claude', 'Peel	Carlisle Rayne', '2022-10-31 22:10:25-04',	'c.c.ryane@email.com',	'2896429355',	'205',	9548,	'Maple',	'Drive',	'L9L 0J6',	'Port Perry',	6700,	0);
 
-
 INSERT INTO users_events (user_id, event_id)
 VALUES 
   (1, 1),
@@ -118,8 +117,7 @@ VALUES
   (37,	0,	1,	'Outdoor tent & seating',	'20 x 40 tent seating for 80',	3100,	3200),
   (38,	0,	1,	'Lighting',	'Event lighting rental - warm glow string lights',	600,	550);
 
-
-INSERT INTO tasks (swimlane_id, task_order, status, title, content, expense_budget, expense_actual)
+INSERT INTO tasks (swimlane_id, task_order, status, title, content, expense_budget)
 VALUES
   (2,	0,	1,	'Staffing	Confirm', 'availability and head count',	1250),
   (2,	3,	1,	'Choose Menu',	'Undecided on soup starter. 4 Vegetarians. 3 Vegans',	2500),
@@ -134,10 +132,7 @@ VALUES
   (29,	2,	1,	'Confirm Photographer',	'Marianne Rothbauer',	3000),
   (36,	0,	1,	'Confirm Photographer',	'Marianne Rothbauer',	3000);
 
-
-
-
-INSERT INTO tasks (swimlane_id, task_order, status, title, content, expense_budget, expense_actual)
+INSERT INTO tasks (swimlane_id, task_order, status, title, content)
 VALUES
   (1,	2,	1,	'Call Grandma',	'Tell her not to die before the big day'),
   (4,	1,	1,	'Seating Chart',	'Keep Uncle Jim far away from Aunt Stella'),
