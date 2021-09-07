@@ -119,7 +119,7 @@ VALUES
 
 INSERT INTO tasks (swimlane_id, task_order, status, title, content, expense_budget)
 VALUES
-  (2,	0,	1,	'Staffing	Confirm', 'availability and head count',	1250),
+  (2,	0,	1,	'Staffing',	'Confirm availability and head count',	1250),
   (2,	3,	1,	'Choose Menu',	'Undecided on soup starter. 4 Vegetarians. 3 Vegans',	2500),
   (3,	2,	1,	'Cake',	'Bakerbots or Milkbar',	800),
   (14,	2,	1,	'Meet with officient', 'Randy 1-800-WED-DING',	200),
