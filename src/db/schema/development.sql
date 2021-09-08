@@ -7,9 +7,9 @@ INSERT INTO events (title, first_name, second_name, event_date, email, phone, un
 VALUES
   ('F&G wedding', 'Frank Alistair', 'Georgia Green', '2021-09-22 22:10:25-04', 'fngwedding@email.com', '4168261456', '23A', 145, 'Brooklands', 'Place', 'M2X 4W9', 'Cityville', 31000, 0),
   ('Lucy & Kate', 'Lucy Watson', 'Kate Lincoln', '2021-10-04 22:10:25-04', 'gettingmarried@email.com', '4161649826', 'Suite 2306', 4873, 'Astor', 'Drive', 'L7R 1K8', 'Townsville', 22000, 0),
-  ('Laurie & Tracy',	'Laurie Jokela',	'Tracy Caron',	'2021-12-13 22:10:25-04',	'tracey_89@email.com',	'9051698255',	'null',	647,	'Derby',	'Road',	'V2J 0K7',	'Quesnel',	21000,	0),
+  ('Laurie & Tracy',	'Laurie Jokela',	'Tracy Caron',	'2021-12-13 22:10:25-04',	'tracey_89@email.com',	'9051698255',	'',	647,	'Derby',	'Road',	'V2J 0K7',	'Quesnel',	21000,	0),
   ('Florence & Taylor',	'Florence Hobson',	'Taylor Leclercq', '2022-06-12 22:10:25-04',	'tleclercq@email.com',	'6476547658',	'Apt 1212',	'1616',	'Lavender',	'Crescent',	'E7B 5R6',	'Saint-Jacques',	11000,	0),
-  ('Reagan & Pacey',	'Reagan Leon',	'Pacey Wallace', '2022-01-01 22:10:25-04',	'r.leon@email.com',	'9056579824',	'null',	12,	'Oxford',	'Road',	'L1E 8A5',	'Courtice',	12500,	0),
+  ('Reagan & Pacey',	'Reagan Leon',	'Pacey Wallace', '2022-01-01 22:10:25-04',	'r.leon@email.com',	'9056579824',	'',	12,	'Oxford',	'Road',	'L1E 8A5',	'Courtice',	12500,	0),
   ('Claude & Carlise', 'Rayne	Claude', 'Peel	Carlisle Rayne', '2022-10-31 22:10:25-04',	'c.c.ryane@email.com',	'2896429355',	'205',	9548,	'Maple',	'Drive',	'L9L 0J6',	'Port Perry',	6700,	0);
 
 INSERT INTO users_events (user_id, event_id)
