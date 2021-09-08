@@ -5,7 +5,7 @@ VALUES
 
 INSERT INTO events (title, first_name, second_name, event_date, email, phone, unit, street_number, street_name, street_type, postal_code, city, expense_budget, expense_actual)
 VALUES
-  ('F&G wedding', 'Frank Alistair', 'Georgia Green', '2021-09-22 22:10:25-04', 'fngwedding@email.com', '4168261456', '23A', 145, 'Brooklands', 'Place', 'M2X 4W9', 'Cityville', 31000, 0),
+  ('F&G wedding', 'Frank Alistair', 'Georgia Green', '2021-09-25 22:10:25-04', 'fngwedding@email.com', '4168261456', '23A', 145, 'Brooklands', 'Place', 'M2X 4W9', 'Cityville', 31000, 0),
   ('Lucy & Kate', 'Lucy Watson', 'Kate Lincoln', '2021-10-04 22:10:25-04', 'gettingmarried@email.com', '4161649826', 'Suite 2306', 4873, 'Astor', 'Drive', 'L7R 1K8', 'Townsville', 22000, 0),
   ('Laurie & Tracy',	'Laurie Jokela',	'Tracy Caron',	'2021-12-13 22:10:25-04',	'tracey_89@email.com',	'9051698255',	'',	647,	'Derby',	'Road',	'V2J 0K7',	'Quesnel',	21000,	0),
   ('Florence & Taylor',	'Florence Hobson',	'Taylor Leclercq', '2022-06-12 22:10:25-04',	'tleclercq@email.com',	'6476547658',	'Apt 1212',	'1616',	'Lavender',	'Crescent',	'E7B 5R6',	'Saint-Jacques',	11000,	0),
